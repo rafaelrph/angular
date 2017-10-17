@@ -8,8 +8,13 @@ import { Http } from '@angular/http';
 })
 export class AppComponent {
 
-    constructor(@Inject(Http) http){
-
+    fotos: Object[] = [];
+    
+    constructor(http: Http){
+        http.get('v1/fotos').subscribe(
+            (res) => this.fotos = res.json(),
+            (erro) => console.log(erro)
+        );
     }
 
 }
