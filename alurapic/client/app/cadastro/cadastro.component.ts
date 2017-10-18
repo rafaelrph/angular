@@ -18,7 +18,7 @@ export class CadastroComponent {
         this.http = http;
 
         this.formulario = fb.group({
-                            titulo: ['', Validators.required],
+                            titulo: ['', Validators.compose([Validators.required, Validators.minLength(4)])],
                             url: ['', Validators.required],
                             descricao: ['']
                           });

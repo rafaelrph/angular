@@ -6,15 +6,20 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label>Título</label>
-                <input name="titulo" [(ngModel)]="foto.titulo" formControlName="titulo" class="form-control"  autocomplete="off">    
-                <span *ngIf="formulario.controls.invalid" class="form-control alert-warning">
-                    Título obrigatório
-                </span> 
+                <input name="titulo" [(ngModel)]="foto.titulo" formControlName="titulo" class="form-control"  autocomplete="off">  
+                <div *ngIf="formulario.controls.titulo.invalid">
+                    <span *ngIf="formulario.controls.titulo.errors.required" class="form-control alert-warning">
+                        Título obrigatório
+                    </span> 
+                    <span *ngIf="formulario.controls.titulo.errors.minlength" class="form-control alert-warning">
+                        Título deve ter no mínimo 4 caracteres
+                    </span> 
+                </div> 
             </div>
             <div class="form-group">
                 <label>URL</label>
                 <input name="url" [(ngModel)]="foto.url" formControlName="url" class="form-control"  autocomplete="off">
-                <span *ngIf="formulario.controls.invalid" class="form-control alert-warning">
+                <span *ngIf="formulario.controls.url.invalid" class="form-control alert-warning">
                     URL obrigatória
                 </span> 
             </div>
@@ -26,6 +31,9 @@
             <button type="submit" class="btn btn-primary" [disabled]="formulario.invalid">Salvar</button>
             <a [routerLink]="['']" class="btn btn-primary">Voltar</a>
             <hr>
+        </div>
+        <div class="col-md-6">
+            <foto url="{{foto.url}}" titulo="{{foto.titulo}}"></foto>
         </div>
     </form>
 </div>
