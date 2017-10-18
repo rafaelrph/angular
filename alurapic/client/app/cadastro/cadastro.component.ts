@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FotoComponent } from '../foto/foto.component';
 import { Http, Headers } from '@angular/http';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
     moduleId: module.id,
@@ -11,9 +12,16 @@ export class CadastroComponent {
 
     foto: FotoComponent = new FotoComponent();
     http: Http;
+    formulario: FormGroup;
 
-    constructor(http: Http) {
+    constructor(http: Http, fb: FormBuilder) {
         this.http = http;
+
+        this.formulario = fb.group({
+                            titulo: ['', Validators.required],
+                            url: ['', Validators.required],
+                            descricao: ['']
+                          });
     }
 
     cadastrar(event) {
@@ -21,11 +29,13 @@ export class CadastroComponent {
         let headers = new Headers();
         headers.append('Content-type', 'application/json');
         this.http.post('v1/fotos', JSON.stringify(this.foto), {headers: headers})
-            .subscribe(() => {
-                this.foto = new FotoComponent();
-                console.log("Foto armazenada com sucesso.");
-            },
-            erro => console.log(erro));
+            .subscribe(
+                () => {
+                    this.foto = new FotoComponent();
+                    console.log("Foto armazenada com sucesso.");
+                },
+                erro => console.log(erro)
+            );
     }
 
 }

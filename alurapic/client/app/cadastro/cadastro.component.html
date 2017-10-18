@@ -2,28 +2,28 @@
 
 <div class="container">
     
-    <form class="row" #formCadastro="ngForm" (submit)="cadastrar($event)">
+    <form class="row" [formGroup]="formulario" (submit)="cadastrar($event)">
         <div class="col-md-6">
             <div class="form-group">
                 <label>Título</label>
-                <input name="titulo" required #titulo="ngModel" [(ngModel)]="foto.titulo" class="form-control"  autocomplete="off">    
-                <span *ngIf="titulo.invalid" class="form-control alert-warning">
+                <input name="titulo" [(ngModel)]="foto.titulo" formControlName="titulo" class="form-control"  autocomplete="off">    
+                <span *ngIf="formulario.controls.invalid" class="form-control alert-warning">
                     Título obrigatório
                 </span> 
             </div>
             <div class="form-group">
                 <label>URL</label>
-                <input name="url" required #url="ngModel" [(ngModel)]="foto.url" class="form-control"  autocomplete="off">
-                <span *ngIf="url.invalid" class="form-control alert-warning">
+                <input name="url" [(ngModel)]="foto.url" formControlName="url" class="form-control"  autocomplete="off">
+                <span *ngIf="formulario.controls.invalid" class="form-control alert-warning">
                     URL obrigatória
                 </span> 
             </div>
             <div class="form-group">
                 <label>Descrição</label>
-                <textarea name="descricao" [(ngModel)]="foto.descricao" class="form-control"  autocomplete="off"></textarea>
+                <textarea name="descricao" formControlName="descricao" [(ngModel)]="foto.descricao" class="form-control"  autocomplete="off"></textarea>
             </div>
 
-            <button type="submit" class="btn btn-primary" [disabled]="formCadastro.form.invalid">Salvar</button>
+            <button type="submit" class="btn btn-primary" [disabled]="formulario.invalid">Salvar</button>
             <a [routerLink]="['']" class="btn btn-primary">Voltar</a>
             <hr>
         </div>
