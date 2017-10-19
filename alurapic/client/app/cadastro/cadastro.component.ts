@@ -50,18 +50,18 @@ export class CadastroComponent {
         event.preventDefault();
         
         this.service.salvar(this.foto).subscribe(
-                (res) => {
-                    this.foto = new FotoComponent();
-                    this.mensagem = res.mensagem;
-                    if(!res.inclusao){
-                        this.router.navigate(['']);
-                    }
-                },
-                erro => {
-                    this.mensagem = "Não foi possível cadastrar o registro.";
-                    console.log(erro);
+            (res) => {
+                this.foto = new FotoComponent();
+                this.mensagem = res.mensagem;
+                if(!res.inclusao){
+                    this.router.navigate(['']);
                 }
-            );
+            },
+            erro => {
+                this.mensagem = "Não foi possível cadastrar o registro.";
+                console.log(erro);
+            }
+        );
     }
 
 }
