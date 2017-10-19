@@ -3,6 +3,7 @@ import { FotoComponent } from '../foto/foto.component';
 import { Http, Headers } from '@angular/http';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FotoService } from '../foto/foto.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     moduleId: module.id,
@@ -14,26 +15,47 @@ export class CadastroComponent {
     foto: FotoComponent = new FotoComponent();
     service: FotoService;
     formulario: FormGroup;
+    mensagem: string = '';
+    route: ActivatedRoute;
 
-    constructor(service: FotoService, fb: FormBuilder) {
+    constructor(service: FotoService, fb: FormBuilder, route: ActivatedRoute) {
         this.service = service;
-
-        this.formulario = fb.group({
-                            titulo: ['', Validators.compose([Validators.required, Validators.minLength(4)])],
-                            url: ['', Validators.required],
-                            descricao: ['']
-                          });
+        this.route = route;
+        this.lerParametros(route);
+        this.adicionarValidacoes(fb);
     }
 
-    cadastrar(event) {
+    lerParametros(route: ActivatedRoute): void {
+        let id = null;
+        this.route.params.subscribe(params => id = params['id']);
+        if(id) {
+            this.service.buscarPorId(id).subscribe((foto) => {
+                this.foto = foto;
+            },
+            erro => console.log(erro));
+        }
+    }
+
+    adicionarValidacoes(fb: FormBuilder): void {
+        this.formulario = fb.group({
+            titulo: ['', Validators.compose([Validators.required, Validators.minLength(4)])],
+            url: ['', Validators.required],
+            descricao: ['']
+          });
+    }
+
+    cadastrar(event): void {
         event.preventDefault();
         
-        this.service.cadastrar(this.foto).subscribe(
+        this.service.salvar(this.foto).subscribe(
                 () => {
                     this.foto = new FotoComponent();
-                    console.log("Foto armazenada com sucesso.");
+                    this.mensagem = "Registro armazenado com sucesso.";
                 },
-                erro => console.log(erro)
+                erro => {
+                    this.mensagem = "Não foi possível cadastrar o registro.";
+                    console.log(erro);
+                }
             );
     }
 

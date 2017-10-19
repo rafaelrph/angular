@@ -10,8 +10,9 @@ import { FotoComponent } from '../foto/foto.component';
 })
 export class ListagemComponent {
 
-    fotos: Object[] = [];
+    fotos: FotoComponent[] = [];
     service: FotoService;
+    mensagem: string = '';
 
     constructor(service: FotoService){
         this.service = service;
@@ -20,18 +21,23 @@ export class ListagemComponent {
 
     listar() {
         this.service.listar().subscribe(
-            (res) => this.fotos = res.json(),
-            (erro) => console.log(erro)
+            res => this.fotos = res,
+            erro => console.log(erro)
         );
     }
 
     remover(foto: FotoComponent): void {
         this.service.remover(foto).subscribe(
             () => {
-                this.listar();
-                console.log("Registro removido com sucesso.");
+                let novaLista = [].concat(this.fotos);
+                novaLista.splice(novaLista.indexOf(foto), 1);
+                this.fotos = novaLista;
+                this.mensagem = "Registro removido com sucesso."
             },
-            (erro) => console.log(erro)
+            erro => {
+                this.mensagem = "Não foi possível remover o registro.";
+                console.log(erro);
+            }
         );
     }
 }
