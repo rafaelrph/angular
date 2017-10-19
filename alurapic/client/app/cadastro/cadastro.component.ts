@@ -3,7 +3,7 @@ import { FotoComponent } from '../foto/foto.component';
 import { Http, Headers } from '@angular/http';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FotoService } from '../foto/foto.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     moduleId: module.id,
@@ -17,10 +17,12 @@ export class CadastroComponent {
     formulario: FormGroup;
     mensagem: string = '';
     route: ActivatedRoute;
+    router: Router;
 
-    constructor(service: FotoService, fb: FormBuilder, route: ActivatedRoute) {
+    constructor(service: FotoService, fb: FormBuilder, route: ActivatedRoute, router: Router) {
         this.service = service;
         this.route = route;
+        this.router = router;
         this.lerParametros(route);
         this.adicionarValidacoes(fb);
     }
@@ -48,9 +50,12 @@ export class CadastroComponent {
         event.preventDefault();
         
         this.service.salvar(this.foto).subscribe(
-                () => {
+                (res) => {
                     this.foto = new FotoComponent();
-                    this.mensagem = "Registro armazenado com sucesso.";
+                    this.mensagem = res.mensagem;
+                    if(!res.inclusao){
+                        this.router.navigate(['']);
+                    }
                 },
                 erro => {
                     this.mensagem = "Não foi possível cadastrar o registro.";
